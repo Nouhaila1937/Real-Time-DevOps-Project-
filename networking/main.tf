@@ -49,25 +49,26 @@ resource "aws_subnet" "dev_proj_1_private_subnets" {
   }
 }
 
-# # Setup Internet Gateway
-# resource "aws_internet_gateway" "dev_proj_1_public_internet_gateway" {
-#   vpc_id = aws_vpc.dev_proj_1_vpc_eu_central_1.id
-#   tags = {
-#     Name = "dev-proj-1-igw"
-#   }
-# }
+# Setup Internet Gateway
+resource "aws_internet_gateway" "dev_proj_1_public_internet_gateway" {
+  vpc_id = aws_vpc.dev_proj_1_vpc_eu_central_1.id
+  tags = {
+    Name = "dev-proj-1-igw"
+  }
+}
 
-# # Public Route Table
-# resource "aws_route_table" "dev_proj_1_public_route_table" {
-#   vpc_id = aws_vpc.dev_proj_1_vpc_eu_central_1.id
-#   route {
-#     cidr_block = "0.0.0.0/0"
-#     gateway_id = aws_internet_gateway.dev_proj_1_public_internet_gateway.id
-#   }
-#   tags = {
-#     Name = "dev-proj-1-public-rt"
-#   }
-# }
+# Public Route Table
+# il permet de bien lier le subnet public par la getway
+resource "aws_route_table" "dev_proj_1_public_route_table" {
+  vpc_id = aws_vpc.dev_proj_1_vpc_eu_central_1.id
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_internet_gateway.dev_proj_1_public_internet_gateway.id
+  }
+  tags = {
+    Name = "dev-proj-1-public-rt"
+  }
+}
 
 # # Public Route Table and Public Subnet Association
 # resource "aws_route_table_association" "dev_proj_1_public_rt_subnet_association" {
